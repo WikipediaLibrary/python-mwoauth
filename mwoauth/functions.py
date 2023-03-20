@@ -189,10 +189,15 @@ def complete(mw_uri, consumer_token, request_token, response_qs,
             "Expected x-www-form-urlencoded response, " +
             "but got some else instead: {0}".format(r.text))
 
-    access_token = AccessToken(
-        credentials.get('oauth_token')[0],
-        credentials.get('oauth_token_secret')[0]
-    )
+    try:
+        access_token = AccessToken(
+            credentials.get('oauth_token')[0],
+            credentials.get('oauth_token_secret')[0]
+        )
+    except TypeError:
+        raise OAuthException(
+            "Expected oauth_token and oauth_token_secret, " +
+            "but got some else instead: {0}".format(r.text))
 
     return access_token
 
